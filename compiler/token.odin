@@ -3,6 +3,8 @@ package uka_tokenizer
 
 Token_Kind :: string
 
+VTABLE :: string
+
 Token :: struct{
 kind: Token_Kind,
 text: string // literal
@@ -10,51 +12,12 @@ text: string // literal
 }
 
 
-next_token :: proc(l:^Lexer) -> Token{
-    tok:Token
+keywords := map[string]VTABLE{
+"fn" = FUNCTION,
+"let" = LET,
+};
 
-    switch l.ch{
-        case '=':
-            tok = new_token(ASSIGN,l.ch)
-        
-        case ';':
-            tok = new_token(SEMICOLON,l.ch)
-        
-        case '(':
-            tok = new_token(LPAREN,l.ch)
-        
-        case ')':
-            tok = new_token(RPAREN,l.ch)
-        
-        case ',':
-            tok = new_token(COMMA,l.ch)
-        
-        case '+':
-            tok = new_token(PLUS,l.ch)
-
-        case '{':
-            tok = new_token(LBRACE,l.ch)
-
-        case '}':
-            tok = new_token(RBRACE,l.ch)
-
-        case 0:
-            tok.text = ""
-            tok.kind = EOF
-
-    }
-read_char(l)
-return tok
-}
-
-
-new_token :: proc(ttype: Token_Kind,ch:byte) -> Token{
-    literal := make([]byte,1)
-    defer delete(literal)
-    literal[0] = ch
-    return Token{kind=ttype,text=string(literal)}
-}
-
+aopjs:="0"
 
 /*
 Foo_Vtable :: struct {
