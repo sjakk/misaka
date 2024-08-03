@@ -23,6 +23,8 @@ lexer_init :: proc(input:string) -> Lexer{
 next_token :: proc(l:^Lexer) -> Token{
     tok:Token
 
+skip_whitespace(l)
+
     switch l.ch{
         case '=':
             tok = new_token(ASSIGN,l.ch)
@@ -51,11 +53,36 @@ next_token :: proc(l:^Lexer) -> Token{
         case 0:
             tok.text = ""
             tok.kind = EOF
+	case:
+		if is_letter(l.ch){
+			tok.text = read_identifier(l)
+			tok.kind = lookup_ident(tok.text)
+			return tok
+		}else if is_digit(l.ch){
+			tok.kind = INT
+			tok.text = read_number(l)
+			return tok
+		}
+		else{
+			tok = new_token(ILLEGAL,l.ch)
+		}
     }
 read_char(l)
 return tok
 }
 
+
+
+skip_whitespace :: proc(l: ^Lexer) {
+for {
+	switch l.ch {
+		case ' ', '\t', '\r', '\n':
+			read_char(l)
+		case:
+			return
+	}
+}
+}
 
 new_token :: proc(ttype: Token_Kind,ch:byte) -> Token{
     literal := make([]byte,1)
@@ -77,8 +104,26 @@ read_char :: proc(l: ^Lexer){
 }
 
 
+read_identifier :: proc(l: ^Lexer) -> string{
+	position := l.position
+	for is_letter(l.ch){
+		read_char(l);
+	}
+	return l.input[position:l.position]
+}
 
-is_letter :: proc(r: rune) -> bool {
+
+
+read_number :: proc(l: ^Lexer) -> string{
+	position:= l.position
+	for is_digit(l.ch){
+		read_char(l)
+	}
+	return string(l.input[position:l.position])
+}
+
+
+is_letter :: proc(r: byte) -> bool {
 	if r < utf8.RUNE_SELF {
 		switch r {
 		case '_':
@@ -87,7 +132,14 @@ is_letter :: proc(r: rune) -> bool {
 			return true
 		}
 	}
-	return unicode.is_letter(r)
+	return false
 }
 
+
+is_digit :: proc(r: byte) -> bool {
+	if '0' <= r && r <= '9' {
+		return true
+	}
+	return false
+}
 

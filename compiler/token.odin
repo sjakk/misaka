@@ -3,8 +3,6 @@ package uka_tokenizer
 
 Token_Kind :: string
 
-VTABLE :: string
-
 Token :: struct{
 kind: Token_Kind,
 text: string // literal
@@ -12,10 +10,26 @@ text: string // literal
 }
 
 
-keywords := map[string]VTABLE{
+keywords := map[string]Token_Kind{
 "fn" = FUNCTION,
 "let" = LET,
 };
+
+
+
+
+lookup_ident :: proc(ident: string) -> Token_Kind{
+
+if tok,ok := keywords[ident]; ok{
+return tok
+}
+return IDENT
+}
+
+
+
+
+
 
 aopjs:="0"
 

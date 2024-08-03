@@ -29,8 +29,9 @@ test_next_token :: proc(t: ^testing.T){
     for v,i in tests{
 
         tok:= next_token(&l)
-        testing.expect(t, tok.kind == v.expectedType,"Different Types provided")
-        testing.expect(t,tok.text == v.expectedText,"Literal Wrong provided")
+        //testing.expect(t, tok.kind == v.expectedType,"Different Types provided")
+        //testing.expect(t,tok.text == v.expectedText,"Literal Wrong provided")
+	testing.expectf(t,tok.kind == v.expectedType,"Expected %q got %q",v.expectedType,tok.kind)
     }
 
 log.debug(keywords)
@@ -45,7 +46,7 @@ test_full_syntax :: proc(t: ^testing.T){
 
 	       let add = fn(x,y){
 		       x + y;
-	       }
+	       };
 	       
 	       let result = add(five,ten);`
 
@@ -98,8 +99,10 @@ l:= lexer_init(input)
 
         tok:= next_token(&l)
 
-        testing.expect(t, tok.kind == v.expectedType,"Different Types provided")
-        testing.expect(t,tok.text == v.expectedLiteral,"Literal Wrong provided")
+        //testing.expect(t, tok.kind == v.expectedType,"Different Types provided")
+        //testing.expect(t,tok.text == v.expectedLiteral,"Literal Wrong provided")
+	testing.expectf(t,tok.kind == v.expectedType,"Expected %q got %q",v.expectedType,tok.kind)
+	testing.expectf(t,tok.text == v.expectedLiteral,"Expected %q got %q",v.expectedLiteral,tok.text)
     }
 
 
