@@ -6,8 +6,6 @@ WIDTH :: 8
 HEIGHT :: 8
 
 
-get_square :: proc()
-
 
 get_bit  :: proc(bitboard: u64,square:u64) -> u64 {
 return (1 if bitboard & (1 << u64(square)) > 0 else 0)
@@ -26,19 +24,14 @@ pop_bit :: proc(bitboard: ^u64,square:FILES){
 
 main :: proc(){
 using FILES
+using Piece_Color
+
+
 
 fc: FILES_COORDINATES = {.e4}; // how tf i use that
-bitboard:u64 = 0;
 
-set_bit(&bitboard,c4)
-set_bit(&bitboard,d8)
-pop_bit(&bitboard,c4)
-set_bit(&bitboard,a8)
-pop_bit(&bitboard,d8)
-set_bit(&bitboard,c4)
-set_bit(&bitboard,h8)
+show_bitboard(mask_pawn_attacks(e4,black))
 
-show_bitboard(bitboard);
 }
 
 
