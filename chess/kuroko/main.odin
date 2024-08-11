@@ -30,7 +30,7 @@ using Piece_Color
 
 fc: FILES_COORDINATES = {.e4}; // how tf i use that
 
-show_bitboard(mask_pawn_attacks(e4,black))
+show_bitboard(mask_pawn_attacks(e4,white))
 
 }
 

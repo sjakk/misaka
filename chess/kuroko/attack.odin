@@ -32,6 +32,7 @@ mask_pawn_attacks :: proc(square: FILES,side: Piece_Color) -> u64{
 			attacks |= (bitboard >> 9)
 		}
 	}else{
+		//black pawns
 		if((bitboard << 7) & not_h_file > 0){
 			attacks |= (bitboard << 7)
 		}
