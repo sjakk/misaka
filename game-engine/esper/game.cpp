@@ -1,8 +1,10 @@
 #include "game.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <iostream>
 
@@ -43,30 +45,10 @@ if(SDL_Init(SDL_INIT_EVERYTHING) == 0){
 std::cout << "All Initialized Successfully\n";
 m_bRunning = true;
 
-//excluir depois
-SDL_Surface* pTempSurface = SDL_LoadBMP("assets/rider.bmp");
-m_pTexture = SDL_CreateTextureFromSurface(m_pRenderer,pTempSurface);
+m_textureManager.load("assets/animate-alpha.png","animate",m_pRenderer);
 
-SDL_FreeSurface(pTempSurface);
-
+SDL_SetRenderDrawColor(m_pRenderer, 255, 0, 0, 255);
 SDL_QueryTexture(m_pTexture,NULL,NULL, &m_sourceRectangle.w,&m_sourceRectangle.h);
-
-m_sourceRectangle.w = 50;
-m_sourceRectangle.h = 50;
-m_destinationRectangle.x = m_sourceRectangle.x = 0;
-m_destinationRectangle.y = m_sourceRectangle.y = 0;
-
-m_destinationRectangle.x = 100;
-m_destinationRectangle.y = 100;
-
-m_sourceRectangle.x = 50;
-m_sourceRectangle.y = 50;
-
-m_destinationRectangle.w = m_sourceRectangle.w;
-m_destinationRectangle.h = m_sourceRectangle.h;
-
-//ex
-
 
 
 
@@ -77,8 +59,17 @@ return true;
 
 void Game::render(){
 	SDL_RenderClear(m_pRenderer);
-	SDL_RenderCopy(m_pRenderer,m_pTexture,NULL,NULL);
+	SDL_RenderCopyEx(m_pRenderer,m_pTexture,&m_sourceRectangle,&m_destinationRectangle,0,0,SDL_FLIP_HORIZONTAL);
+
+        m_textureManager.draw("animate",50,50,128,82,m_pRenderer);
+        m_textureManager.drawFrame("animate", 100, 100, 128, 82, 1,m_currentFrame,m_pRenderer);
+
 	SDL_RenderPresent(m_pRenderer);
+}
+
+void Game::update(){
+	//m_sourceRectangle.x = 128 * int((SDL_GetTicks() / 100) % 6);
+	m_currentFrame = int((SDL_GetTicks() / 100)%6);
 }
 
 

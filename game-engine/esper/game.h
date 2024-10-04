@@ -5,6 +5,7 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
+#include "texturemanager.h"
 
 class Game{
 
@@ -16,7 +17,7 @@ bool init(const char* title, int xpos, int ypos, int width, int
 height, bool fullscreen);
 
 void render();
-void update(){}
+void update();
 void handleEvents();
 void clean();
 
@@ -29,6 +30,10 @@ SDL_Renderer* m_pRenderer;
 SDL_Texture* m_pTexture;
 SDL_Rect m_sourceRectangle;
 SDL_Rect m_destinationRectangle;
+
+
+int m_currentFrame;
+TextureManager m_textureManager;
 
 
 bool m_bRunning;
